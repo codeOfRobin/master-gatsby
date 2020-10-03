@@ -4,9 +4,9 @@ import Layout from '../components/Layout';
 
 export default function BeersPage() {
   return (
-    <Layout>
+    <>
       <Nav />
       <p> Hey! I'm the beers page </p>
-    </Layout>
+    </>
   );
 }
