@@ -1,11 +1,8 @@
-import React from 'react';
-import Nav from '../components/Nav';
-import Layout from '../components/Layout';
+import React from "react";
 
 export default function BeersPage() {
   return (
     <>
-      <Nav />
       <p> Hey! I'm the beers page </p>
     </>
   );
