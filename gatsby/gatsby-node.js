@@ -52,6 +52,18 @@ async function turnToppingsIntoPages({ graphql, actions }) {
   })
 }
 
+async function fetchBeersAndTurnIntoNodes({actions, createNodeId, createContentDigest}) {
+  
+}
+
+export async func sourceNodes(params) {
+  await Promise.all(
+    [
+      fetchBeersAndTurnIntoNodes(params)
+    ]
+}
+
+
 export async function createPages(params) {
   await Promise.all([
     turnPizzasIntoPages(params),
