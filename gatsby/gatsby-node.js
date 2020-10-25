@@ -54,23 +54,27 @@ async function turnToppingsIntoPages({ graphql, actions }) {
 }
 
 async function fetchBeersAndTurnIntoNodes({actions, createNodeId, createContentDigest}) {
-  const res = await fetch('https://sampleapis.com/beers/api/ale')
-  const beers = await res.json()
+  // 1. Fetch a  list of beers
+  const res = await fetch('https://sampleapis.com/beers/api/ale');
+  const beers = await res.json();
+  // 2. Loop over each one
   for (const beer of beers) {
+    // create a node for each beer
     const nodeMeta = {
-      id:createNodeId(`beer-${beer.name}`),
+      id: createNodeId(`beer-${beer.name}`),
       parent: null,
       children: [],
       internal: {
         type: 'Beer',
         mediaType: 'application/json',
-        contentDigest: createContentDigest(beer)
-      }
-    }
+        contentDigest: createContentDigest(beer),
+      },
+    };
+    // 3. Create a node for that beer
     actions.createNode({
       ...beer,
-      ...nodeMeta
-    })
+      ...nodeMeta,
+    });
   }
 }
 
