@@ -1,20 +1,20 @@
-import React from 'react';
-import {graphql, Link} from 'gatsby';
-import Img from 'gatsby-image';
-import styled from 'styled-components';
-
+import React from "react";
+import { graphql, Link } from "gatsby";
+import Img from "gatsby-image";
+import styled from "styled-components";
+import Pagination from "../components/Pagination";
 
 const SliceMasterGrid = styled.div`
   display: grid;
   grid-gap: 2rem;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-`
+`;
 
 const SlicemasterStyles = styled.div`
   a {
     text-decoration: none;
   }
-  .gatsby-image-wrapper { 
+  .gatsby-image-wrapper {
     height: 400px;
   }
   h2 {
@@ -35,12 +35,19 @@ const SlicemasterStyles = styled.div`
     transform: rotate(1deg);
     text-align: center;
   }
-`
+`;
 
 export default function SlicemastersPage({ data, pageContext }) {
-  const slicemasters = data.slicemasters.nodes
+  const slicemasters = data.slicemasters.nodes;
   return (
     <>
+      <Pagination
+        pageSize={parseInt(process.env.GATSBY_PAGE_SIZE)}
+        totalCount={data.slicemasters.totalCount}
+        currentPage={pageContext.currentPage || 1}
+        skip={pageContext.skip}
+        base="/slicemasters"
+      />
       <SliceMasterGrid>
         {slicemasters.map((person) => (
           <SlicemasterStyles>
@@ -49,8 +56,8 @@ export default function SlicemastersPage({ data, pageContext }) {
                 <span className="mark">{person.name}</span>
               </h2>
             </Link>
-            <Img fluid = {person.image.asset.fluid}/>
-            <p className = "description">{person.description}</p>
+            <Img fluid={person.image.asset.fluid} />
+            <p className="description">{person.description}</p>
           </SlicemasterStyles>
         ))}
       </SliceMasterGrid>
@@ -59,7 +66,7 @@ export default function SlicemastersPage({ data, pageContext }) {
 }
 
 export const query = graphql`
-  query($skip: Int = 0, $pageSize: Int = 4) {
+  query($skip: Int = 0, $pageSize: Int = 2) {
     slicemasters: allSanityPerson(limit: $pageSize, skip: $skip) {
       totalCount
       nodes {
@@ -79,4 +86,4 @@ export const query = graphql`
       }
     }
   }
-`
+`;
