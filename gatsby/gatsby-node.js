@@ -1,38 +1,6 @@
 import path from 'path';
 import fetch from 'isomorphic-fetch';
 
-async function turnSliceMastersIntoPages({graphql, actions}) {
-  const sliceMasterTemplate = path.resolve('./src/templates/SliceMaster.js')
-  
-  const { data } = await graphql(`
-    query {
-      people: allSanityPerson {
-        edges {
-          node {
-            id
-            image {
-              asset {
-                id
-              }
-            }
-            description
-            name
-            slug {
-              current
-            }
-          }
-        }
-      }
-    }
-  `);
-  
-  data.people.nodes.forEach((person) => {
-    actions.createPage({
-      path: `slicemaster/${person.slug.current}`
-    })
-  })
-}
-
 async function turnPizzasIntoPages({ graphql, actions }) {
   const pizzaTemplate = path.resolve('./src/templates/Pizza.js');
 
@@ -137,6 +105,20 @@ async function turnSliceMastersIntoPages({graphql, actions}) {
         skip: index * pageSize,
         currentPage: index + 1,
         pageSize: pageSize
+      }
+    })
+  })
+  
+  console.log(data)
+   
+  const sliceMasterTemplate = path.resolve('./src/templates/SliceMaster.js')
+  data.sliceMasters.nodes.forEach((person) => {
+    actions.createPage({
+      path: `slicemaster/${person.slug.current}`,
+      component: sliceMasterTemplate,
+      context: {
+        slug: person.slug.current,
+        name: person.name
       }
     })
   })
