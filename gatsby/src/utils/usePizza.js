@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import OrderContext from '../components/OrderContext';
+import attachNamesAndPrices from './attachNamesAndPrices';
 import calculateOrderTotal from './calculateOrderTotal';
 import formatMoney from './formatMoney';
 
@@ -15,13 +16,32 @@ export default function usePizza({ pizzas, values }) {
     e.preventDefault();
     console.log(e);
     setLoading(true);
+    setError(null)
+    setMessage(null)
+    
     const body = {
-      order,
+      order: attachNamesAndPrices(order, pizzas),
       total: formatMoney(calculateOrderTotal(order, pizzas)),
       name: values.name,
       email: values.email,
     };
-    console.log(body);
+
+    const res = await fetch(`${proces.env.GATSBY_SERVERLESS_BASE}/placeholder`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+
+    const text = JSON.parse(await res.text())
+    if(res.status > 400 && res.status < 600) {
+      setLoading(false)
+      setError(text.message)
+    } else {
+      setLoading(false)
+      setMessage('Success! come down for pizza')
+    }
   }
 
   function addToOrder(orderedPizza) {
