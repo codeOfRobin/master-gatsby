@@ -16,9 +16,9 @@ export default function usePizza({ pizzas, values }) {
     e.preventDefault();
     console.log(e);
     setLoading(true);
-    setError(null)
-    setMessage(null)
-    
+    setError(null);
+    setMessage(null);
+
     const body = {
       order: attachNamesAndPrices(order, pizzas),
       total: formatMoney(calculateOrderTotal(order, pizzas)),
@@ -26,21 +26,24 @@ export default function usePizza({ pizzas, values }) {
       email: values.email,
     };
 
-    const res = await fetch(`${proces.env.GATSBY_SERVERLESS_BASE}/placeholder`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    })
+    const res = await fetch(
+      `${process.env.GATSBY_SERVERLESS_BASE}/placeOrder`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      }
+    );
 
-    const text = JSON.parse(await res.text())
-    if(res.status > 400 && res.status < 600) {
-      setLoading(false)
-      setError(text.message)
+    const text = JSON.parse(await res.text());
+    if (res.status > 400 && res.status < 600) {
+      setLoading(false);
+      setError(text.message);
     } else {
-      setLoading(false)
-      setMessage('Success! come down for pizza')
+      setLoading(false);
+      setMessage('Success! come down for pizza');
     }
   }
 
