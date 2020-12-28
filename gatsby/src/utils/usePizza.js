@@ -24,6 +24,7 @@ export default function usePizza({ pizzas, values }) {
       total: formatMoney(calculateOrderTotal(order, pizzas)),
       name: values.name,
       email: values.email,
+      mapleSyrup: values.mapleSyrup,
     };
 
     const res = await fetch(
@@ -38,7 +39,7 @@ export default function usePizza({ pizzas, values }) {
     );
 
     const text = JSON.parse(await res.text());
-    if (res.status > 400 && res.status < 600) {
+    if (res.status >= 400 && res.status < 600) {
       setLoading(false);
       setError(text.message);
     } else {

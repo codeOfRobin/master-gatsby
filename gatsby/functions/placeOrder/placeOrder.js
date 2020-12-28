@@ -30,6 +30,13 @@ exports.handler = async (event, context) => {
 
   const body = JSON.parse(event.body);
 
+  if (body.mapleSyrup) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: `Boop beep bopp zz Goodbye` }),
+    };
+  }
+
   for (const field of requiredFields) {
     if (!body[field]) {
       return {
@@ -39,7 +46,7 @@ exports.handler = async (event, context) => {
     }
   }
 
-  if (!body.order.length) {
+  if (body.order.length === 0) {
     return {
       statusCode: 400,
       body: JSON.stringify({ message: `Why would you order nothing?` }),
